@@ -22,29 +22,12 @@ struct Ball
     int direzione;// 9=NE, 3=SE, 1=SO, 7=NO (Direzioni del tastierino numerico)
 };
 
-void direzione (char matrix[x][y]) // Fiore
-{
-    if (direzione=!9 || direzione=!3 || direzione=!1 || direzione=! 1)
-    if (direzione == 9)
-    {
-        matrix[x+1][y+1];
-         if (direzione == 3)
-        {
-            matrix[x-1][y+1];
-            if (direzione == 1)
-            {
-                matrix[x-1][y-1];
-                if (direzione == 7)
-                    ms
-            }
-        }
-    }       
-}
 
 void riempiMatrice(char matrice[20][50]) // Fiore
 {
     // Inizializza la matrice  
-    for (int conta=0; conta<20; conta++){
+    for (int conta=0; conta<20; conta++)
+    {
         if (conta==0 || conta==49)
             matrice [20][conta] >> '#';
     }
@@ -62,22 +45,88 @@ void stampaMatrice(char matrice[20][50]) // Chiara
     // Si cancella lo schermo
     system("cls"); // In C++ si può eseguire un comando del terminal con la funzione system()
     // Si deve stampare la matrice
+    using namespace std;
     for (int i=0; i<20; i++)
     {
         for (int j=0; j<50; j++)
-            std::cout<<matrix[i][j];
-        std::cout<<std::endl;
+            cout<<matrix[i][j];
+        cout<<endl;
     }
 }
 
 
 bool controlla(Ball palla) // Chiara
 {
-    // Controlla se la palla è in posizione palla.x = 0 o palla.x = 1
-    if (palla.x==0)
+    // Controlla se la palla è in posizione palla.x = 0
+    if (palla.x == 0) // Ha toccato il bordo superiore, quindi ha perso
         return true;
     else
         return false;
+}
+
+
+void muoviPalla(Partita p) // Fiore
+{
+    // Tiene conto della direzione della palla (p.palla.direzione) e cambia la posizione della palla di conseguenza
+    if (p.palla.direzione == 1) 
+    {
+        // Muovo la palla verso Sud-Est (quindi cambio p.palla.x e p.palla.y)
+        p.palla.x--;
+        p.palla.y--;
+    }
+    else if (p.palla.direzione == 3)
+    {
+        p.palla.x++;
+        p.palla.y--;     
+    }
+    else if (p.palla.direzione == 9)
+    {
+        p.palla.x;
+        p.palla.y;
+    }
+    else if (p.palla == 7)
+    {
+        p.palla.x;
+        p.palla.y;
+    }
+
+    // Mentre lo fa tiene anche conto di se vengono toccati muri, se si è nella cella di fianco a un muro e si sta andando verso il muro si deve cambiare la direzione ---> faccio girare la palla
+    if (p.palla.x == 0) 
+    {
+        
+    }
+    else if (p.palla.x == 48)
+    {
+
+    }
+    else if (p.palla.y == 0)
+    {
+
+    }
+    else if (p.palla.y == 19)
+    {
+        
+    }
+    // Cambi la direzione a seconda da quale direzione stavi venendo
+    // Ad esempio se venivi verso Sud-Est la tua direzione cambia in Nord-Ovest
+}
+
+
+void aggiornaMatrice(Partita p) // Chiara
+{
+    // Cancella la vecchia pallina (cerca una 'O' dentro p.matrix)
+    for (int i=0; i<20; i++)
+    {
+        for (int j=0; j<50; j++)
+        {
+            if(p.matrix[i][j] == 'O')
+                p.matrix[i][j] == ' ';
+        }
+    }
+    
+    // Posiziona la nuova pallina sulla base delle coordinate (p.palla.x e p.palla.y)
+
+    // Stessa cosa per la paletta del giocatore
 }
 
 
@@ -94,8 +143,9 @@ int main()
 {
     Partita p;
     p.skin = '_';
+    p.palla.skin = 'O';
 
-    riempiMatrice(p.matrix);
+    riempiMatrice(p.matrix); // Fatta ✔️
 
 
     bool end = false;
@@ -106,7 +156,7 @@ int main()
         while (input.wait_for(0.15s) != std::future_status::ready) 
         {
             // Controlliamo se ha perso
-            if (controlla(p)) 
+            if (controlla(p)) // Fatta ✔️
             { // Il giocatore ha perso
                 end = true;
                 break;
@@ -116,13 +166,13 @@ int main()
             // Aggiorniamo la matrice
             aggiornaMatrice(p);
             // Aggiorniamo l'immagine
-            stampaMatrice(p.matrix);
+            stampaMatrice(p.matrix); // Fatta ✔️
             p.punteggio++;
         }
         processMove(p, input.get());
         if (end)
             break;
     }
-    updateMatrix(p);
-    printMatrix(p.matrix);
+    aggiornaMatrice(p);
+    stampaMatrice(p.matrix);
 }
