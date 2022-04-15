@@ -100,23 +100,23 @@ void muoviPalla(Partita &p) // Fiore
     {
         if(p.palla.direzione == 7)
         {
-            p.palla.direzione = 3; 
+            p.palla.direzione = 1; 
         }
-        else if (p.palla.direzione == 1)
+        else if (p.palla.direzione == 9)
         {
-            p.palla.direzione = 9;
+            p.palla.direzione = 3;
         }
     }
     
     if (p.palla.x == 49) // Se colpisci il muro a destra
     {
-        if(p.palla.direzione == 9)
+        if(p.palla.direzione == 1)
         {
-            p.palla.direzione = 1; 
+            p.palla.direzione = 7; 
         }
         else if (p.palla.direzione == 3)
         {
-            p.palla.direzione = 7;
+            p.palla.direzione = 9;
         }
     }
     
@@ -124,11 +124,11 @@ void muoviPalla(Partita &p) // Fiore
     {
         if(p.palla.direzione == 9)
         {
-            p.palla.direzione = 1; 
+            p.palla.direzione = 3; 
         }
         else if (p.palla.direzione == 3)
         {
-            p.palla.direzione = 7;
+            p.palla.direzione = 9;
         }
     }
 
