@@ -68,63 +68,62 @@ bool controlla(Ball palla) // Chiara
 }
 
 
-void aggiornaMatrice(Partita &p);
 void muoviPalla(Partita &p) // Fiore
 {
     // Tiene conto della direzione della palla (p.palla.direzione) e cambia la posizione della palla di conseguenza
     
-    if (p.palla.direzione == 1) 
+    if (p.palla.direzione == 1)
     {
-        // Muovo la palla verso Sud-Ovest (quindi cambio p.palla.x e p.palla.y)
+    // Muovo la palla verso Sud-Ovest (cambio p.palla.x e p.palla.y)
         p.palla.x--;
         p.palla.y++;
     }
-    else if (p.palla.direzione == 3)
+    else if (p.palla.direzione == 3) 
     {
         p.palla.x++;
         p.palla.y++;
     }
-    else if (p.palla.direzione == 7)
+    else if (p.palla.direzione == 7) 
     {
         p.palla.x--;
         p.palla.y--;
     }
-    else if (p.palla.direzione == 9)
+    else if (p.palla.direzione == 9) 
     {
         p.palla.x++;
         p.palla.y--;
     }
 
-
+    // 9=NE, 3=SE, 1=SO, 7=NO
     if (p.palla.x == 0) // Se colpisci il muro sinistra
     {
         if(p.palla.direzione == 7)
         {
-            p.palla.direzione = 1; 
+            p.palla.direzione = 9; 
         }
-        else if (p.palla.direzione == 9)
+        else if (p.palla.direzione == 1)
         {
             p.palla.direzione = 3;
         }
     }
-    
+
     if (p.palla.x == 49) // Se colpisci il muro a destra
     {
-        if(p.palla.direzione == 1)
+        if(p.palla.direzione == 9)
         {
             p.palla.direzione = 7; 
         }
         else if (p.palla.direzione == 3)
         {
-            p.palla.direzione = 9;
+            p.palla.direzione = 1;
         }
     }
-    
+    // 9=NE, 3=SE, 1=SO, 7=NO
     if (p.palla.y == 19) // Se colpisci il muro in basso
     {
-        if(p.palla.direzione == 9)
+        if(p.palla.direzione == 1)
         {
-            p.palla.direzione = 3; 
+            p.palla.direzione = 7;
         }
         else if (p.palla.direzione == 3)
         {
@@ -169,10 +168,22 @@ void aggiornaMatrice(Partita &p) // Chiara
         if (p.matrix[3][j] == p.skin) // p.skin = '_'
             p.matrix[3][j] = ' ';
     }
-    stampaMatrice(p.matrix);
+
     p.matrix[3][p.x-1] = p.skin;
     p.matrix[3][p.x] = p.skin;
     p.matrix[3][p.x+1] = p.skin;
+
+    for (int conta=0; conta<50; conta++)
+    {
+        p.matrix[0][conta] = '#';
+        p.matrix[19][conta] = '#';
+    }
+    
+    for (int conta=0; conta<20; conta++)
+    {
+        p.matrix[conta][0] = '#';
+        p.matrix[conta][49] = '#';
+    }
 }
 
 
