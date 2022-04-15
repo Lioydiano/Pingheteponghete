@@ -25,17 +25,22 @@ struct Partita
 
 void riempiMatrice(char matrice[20][50]) // Fiore
 {
-    // Inizializza la matrice  
-    for (int conta=0; conta<20; conta++)
-    {
-        if (conta==0 || conta==49)
-            matrice [20][conta] = '#';
-    }
-    
+    // Inizializza la matrice
+	for (int i=0; i<20; i++) {
+		for (int j=0; j<50; j++)
+			matrice[i][j] = ' ';
+	}
+
     for (int conta=0; conta<50; conta++)
     {
-        if (conta==0 || conta==19)
-            matrice [conta][50] = '#';
+        matrice[0][conta] = '#';
+        matrice[19][conta] = '#';
+    }
+    
+    for (int conta=0; conta<20; conta++)
+    {
+        matrice[conta][0] = '#';
+        matrice[conta][49] = '#';
     }
 }
 
@@ -94,11 +99,11 @@ void muoviPalla(Partita &p) // Fiore
     {
         if(p.palla.direzione == 7)
         {
-            p.palla.direzione == 3; 
+            p.palla.direzione = 3; 
         }
         else if (p.palla.direzione == 1)
         {
-            p.palla.direzione == 9;
+            p.palla.direzione = 9;
         }
     }
     
@@ -106,11 +111,11 @@ void muoviPalla(Partita &p) // Fiore
     {
         if(p.palla.direzione == 9)
         {
-            p.palla.direzione == 1; 
+            p.palla.direzione = 1; 
         }
         else if (p.palla.direzione == 3)
         {
-            p.palla.direzione == 7;
+            p.palla.direzione = 7;
         }
     }
     
@@ -118,11 +123,11 @@ void muoviPalla(Partita &p) // Fiore
     {
         if(p.palla.direzione == 9)
         {
-            p.palla.direzione == 1; 
+            p.palla.direzione = 1; 
         }
         else if (p.palla.direzione == 3)
         {
-            p.palla.direzione == 7;
+            p.palla.direzione = 7;
         }
     }
 }
@@ -136,7 +141,7 @@ void aggiornaMatrice(Partita &p) // Chiara
         for (int j=0; j<50; j++)
         {
             if(p.matrix[i][j] == 'O')
-                p.matrix[i][j] == ' '; // Fatto
+                p.matrix[i][j] = ' '; // Fatto
         }
     }
     
@@ -148,8 +153,10 @@ void aggiornaMatrice(Partita &p) // Chiara
     for (int j=0; j<50; j++) // Guardi tutta la riga 3
     {
         if (p.matrix[3][j] == p.skin) // p.skin = '_'
-            p.matrix[3][j] == ' ';
+            p.matrix[3][j] = ' ';
     }
+    std::cout << p.matrix[p.palla.y][p.palla.x] << ' ' << p.palla.y << ' ' << p.palla.x << '\n';
+    stampaMatrice(p.matrix);
     p.matrix[3][p.x] = '_';
 }
 
@@ -180,9 +187,11 @@ int main()
     Partita p;
     p.skin = '_';
     p.palla.skin = 'O';
+    p.x = 10;
+    p.palla.x = 10;
+    p.palla.y = 10;
 
     riempiMatrice(p.matrix); // Fatta
-
 
     bool end = false;
     while (true) 
