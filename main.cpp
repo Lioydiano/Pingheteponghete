@@ -71,7 +71,7 @@ bool controlla(Ball palla) // Chiara
 void muoviPalla(Partita &p) // Fiore
 {
     // Tiene conto della direzione della palla (p.palla.direzione) e cambia la posizione della palla di conseguenza
-    // 9=NE, 3=SE, 1=SO, 7=NO
+    
     if (p.palla.direzione == 1) 
     {
         // Muovo la palla verso Sud-Est (quindi cambio p.palla.x e p.palla.y)
@@ -94,7 +94,7 @@ void muoviPalla(Partita &p) // Fiore
         p.palla.y++;
     }
 
-    // Questa parte va riscritta perché dipende da che muro colpisci
+
     if (p.palla.x == 0) // Se colpisci il muro sinistra
     {
         if(p.palla.direzione == 7)
@@ -130,6 +130,19 @@ void muoviPalla(Partita &p) // Fiore
             p.palla.direzione = 7;
         }
     }
+
+    // Controllo se colpisce la paletta
+    // 9=NE, 3=SE, 1=SO, 7=NO
+    if (p.palla.y == 3)
+    {
+        if (p.matrix[3][p.palla.x] == p.skin) // p.skin = '_'
+        {
+            if (p.palla.direzione == 9) // stava andando verso Nord Est
+                p.palla.direzione = 3;// Rimbalza verso Sud Est
+            else if (p.palla.direzione == 7) // stava andando verso Nord  Ovest
+                p.palla.direzione = 1;
+        }
+    }
 }
 
 
@@ -155,9 +168,10 @@ void aggiornaMatrice(Partita &p) // Chiara
         if (p.matrix[3][j] == p.skin) // p.skin = '_'
             p.matrix[3][j] = ' ';
     }
-    std::cout << p.matrix[p.palla.y][p.palla.x] << ' ' << p.palla.y << ' ' << p.palla.x << '\n';
     stampaMatrice(p.matrix);
-    p.matrix[3][p.x] = '_';
+    p.matrix[3][p.x-1] = p.skin;
+    p.matrix[3][p.x] = p.skin;
+    p.matrix[3][p.x+1] = p.skin;
 }
 
 
@@ -188,8 +202,9 @@ int main()
     p.skin = '_';
     p.palla.skin = 'O';
     p.x = 10;
-    p.palla.x = 10;
+    p.palla.x = 15;
     p.palla.y = 10;
+    p.palla.direzione = 1;
 
     riempiMatrice(p.matrix); // Fatta
 
