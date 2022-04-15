@@ -3,6 +3,15 @@
 #include <thread>
 #include <future>
 
+// fare la skin per partita e palla
+
+struct Ball
+{
+    int x; // destra-sinistra
+    int y; // alto-basso
+    char skin;
+    int direzione;// 9=NE, 3=SE, 1=SO, 7=NO (Direzioni del tastierino numerico)
+};
 
 struct Partita
 {
@@ -14,42 +23,31 @@ struct Partita
 };
 
 
-struct Ball
-{
-    int x;
-    int y;
-    char skin;
-    int direzione;// 9=NE, 3=SE, 1=SO, 7=NO (Direzioni del tastierino numerico)
-};
-
-
 void riempiMatrice(char matrice[20][50]) // Fiore
 {
     // Inizializza la matrice  
     for (int conta=0; conta<20; conta++)
     {
         if (conta==0 || conta==49)
-            matrice [20][conta] >> '#';
+            matrice [20][conta] = '#';
     }
     
     for (int conta=0; conta<50; conta++)
     {
         if (conta==0 || conta==19)
-            matrice [conta][50] >> '#';
+            matrice [conta][50] = '#';
     }
 }
 
 
 void stampaMatrice(char matrice[20][50]) // Chiara
 {
-    // Si cancella lo schermo
-    system("cls"); // In C++ si può eseguire un comando del terminal con la funzione system()
-    // Si deve stampare la matrice
-    using namespace std;
+    system("cls"); // Si cancella lo schermo
+    using namespace std; // Si deve stampare la matrice
     for (int i=0; i<20; i++)
     {
         for (int j=0; j<50; j++)
-            cout<<matrix[i][j];
+            cout<<matrice[i][j];
         cout<<endl;
     }
 }
@@ -58,71 +56,79 @@ void stampaMatrice(char matrice[20][50]) // Chiara
 bool controlla(Ball palla) // Chiara
 {
     // Controlla se la palla è in posizione palla.x = 0
-    if (palla.x == 0) // Ha toccato il bordo superiore, quindi ha perso
+    if (palla.y == 0) // Ha toccato il bordo superiore, quindi ha perso
         return true;
     else
         return false;
 }
 
 
-void muoviPalla(Partita p) // Fiore
+void muoviPalla(Partita &p) // Fiore
 {
     // Tiene conto della direzione della palla (p.palla.direzione) e cambia la posizione della palla di conseguenza
+    // 9=NE, 3=SE, 1=SO, 7=NO
     if (p.palla.direzione == 1) 
     {
         // Muovo la palla verso Sud-Est (quindi cambio p.palla.x e p.palla.y)
         p.palla.x--;
-        p.palla.y++;
+        p.palla.y--;
     }
     else if (p.palla.direzione == 3)
     {
         p.palla.x++;
-        p.palla.y++;     
+        p.palla.y--;
     }
     else if (p.palla.direzione == 7)
     {
         p.palla.x--;
-        p.palla.y--;
+        p.palla.y++;
     }
     else if (p.palla.direzione == 9)
     {
         p.palla.x++;
-        p.palla.y--;
+        p.palla.y++;
     }
 
-//se incontro il muro lo faccio girare dall'altra parte
-//se arriva alla lineaprima dei bordi
-//se incontra la paletta 
-
-if (p.palla.direzione == 9)
-    p.palla.direzione = 3;
-else if (p.palla.direzione == 9)
-    p.palla.direzione = 3;
-    // Mentre lo fa tiene anche conto di se vengono toccati muri, se si è nella cella di fianco a un muro e si sta andando verso il muro si deve cambiare la direzione ---> faccio girare la palla a seconda da dove si è venuti
-
-    if (p.palla.y == 3) { // Potrebbe esserci la paletta in corrispondenza della palla
-        if (p.matrix[p.palla.x][3] == p.skin) // Se c'è la paletta allora devi cambiare direzione come se fosse un muro
+    // Questa parte va riscritta perché dipende da che muro colpisci
+    if (p.palla.x == 0) // Se colpisci il muro sinistra
+    {
+        if(p.palla.direzione == 7)
         {
-            // Può venire da NE o da NO
-            if (p.palla.direzione == 9)
-                p.palla.direzione = 3;
-            // Se andava verso NE adesso andrà verso SE
-            if (p.palla.direzione == 7)
-                p.palla.direzione = 1;
-            // Se andava verso NO adesso andrà verso SO
+            p.palla.direzione == 3; 
+        }
+        else if (p.palla.direzione == 1)
+        {
+            p.palla.direzione == 9;
         }
     }
-    else if (p.palla.x == 48)
-        p.palla.x--; // NO! NON CAMBI LA POSIZIONE MA SOLO LA DIREZIONE!
-    else if (p.palla.x == 1)
-        p.palla.y--;
-    else if (p.palla.y == 18)
-        .palla.y++;
+    
+    if (p.palla.x == 49) // Se colpisci il muro a destra
+    {
+        if(p.palla.direzione == 9)
+        {
+            p.palla.direzione == 1; 
+        }
+        else if (p.palla.direzione == 3)
+        {
+            p.palla.direzione == 7;
+        }
+    }
+    
+    if (p.palla.y == 19) // Se colpisci il muro in basso
+    {
+        if(p.palla.direzione == 9)
+        {
+            p.palla.direzione == 1; 
+        }
+        else if (p.palla.direzione == 3)
+        {
+            p.palla.direzione == 7;
+        }
+    }
 }
 
 
-
-void aggiornaMatrice(Partita p) // Chiara
+void aggiornaMatrice(Partita &p) // Chiara
 {
     // Cancella la vecchia pallina (cerca una 'O' dentro p.matrix)
     for (int i=0; i<20; i++)
@@ -130,29 +136,40 @@ void aggiornaMatrice(Partita p) // Chiara
         for (int j=0; j<50; j++)
         {
             if(p.matrix[i][j] == 'O')
-                p.matrix[i][j] == ' '; // Fatto ✔️
+                p.matrix[i][j] == ' '; // Fatto
         }
     }
     
     // Posiziona la nuova pallina ('O') sulla base delle coordinate (p.palla.x e p.palla.y)
-    p.matrix[p.palla.x][p.palla.y] = 'O';
+    p.matrix[p.palla.y][p.palla.x] = 'O';
 
     // Stessa cosa per la paletta del giocatore, prima pulisci tutta la riga 3, e poi stampi sopra le righette
     // Consiglio: usare p.skin invece di '_' così in caso poi le cambiamo
     for (int j=0; j<50; j++) // Guardi tutta la riga 3
     {
-        if(p.matrix[3][j] == '_')
+        if (p.matrix[3][j] == p.skin) // p.skin = '_'
             p.matrix[3][j] == ' ';
     }
-    p.matrix[p.x][p.y] = '_';
-    
+    p.matrix[3][p.x] = '_';
+}
+
+
+void processaMossa(Partita &p, int mossa) // Chiara
+{
+    // Sposta la paletta a seconda di quanto indicato dall'utente
+    // 4 = sinistra, 6 = destra
+    if (mossa == 4)
+        p.x--;// Muovi a sinistra
+    else if (mossa == 6)
+        p.x++;
 }
 
 
 // Attende una mossa, poi ritorna il valore
-std::string inputMossa() //spiegazione di Mattia in classe
+int inputMossa() //spiegazione di Mattia in classe
 {
-    std::string mossa;
+    using namespace std;
+    int mossa;
     if (cin >> mossa)
         return mossa;
 }
@@ -164,7 +181,7 @@ int main()
     p.skin = '_';
     p.palla.skin = 'O';
 
-    riempiMatrice(p.matrix); // Fatta ✔️
+    riempiMatrice(p.matrix); // Fatta
 
 
     bool end = false;
@@ -175,7 +192,7 @@ int main()
         while (input.wait_for(0.15s) != std::future_status::ready) 
         {
             // Controlliamo se ha perso
-            if (controlla(p)) // Fatta ✔️
+            if (controlla(p.palla)) // Fatta
             { // Il giocatore ha perso
                 end = true;
                 break;
@@ -185,10 +202,10 @@ int main()
             // Aggiorniamo la matrice
             aggiornaMatrice(p);
             // Aggiorniamo l'immagine
-            stampaMatrice(p.matrix); // Fatta ✔️
+            stampaMatrice(p.matrix); // Fatta
             p.punteggio++;
         }
-        processMove(p, input.get());
+        processaMossa(p, input.get());
         if (end)
             break;
     }
