@@ -68,30 +68,31 @@ bool controlla(Ball palla) // Chiara
 }
 
 
+void aggiornaMatrice(Partita &p);
 void muoviPalla(Partita &p) // Fiore
 {
     // Tiene conto della direzione della palla (p.palla.direzione) e cambia la posizione della palla di conseguenza
     
     if (p.palla.direzione == 1) 
     {
-        // Muovo la palla verso Sud-Est (quindi cambio p.palla.x e p.palla.y)
+        // Muovo la palla verso Sud-Ovest (quindi cambio p.palla.x e p.palla.y)
         p.palla.x--;
-        p.palla.y--;
+        p.palla.y++;
     }
     else if (p.palla.direzione == 3)
     {
         p.palla.x++;
-        p.palla.y--;
+        p.palla.y++;
     }
     else if (p.palla.direzione == 7)
     {
         p.palla.x--;
-        p.palla.y++;
+        p.palla.y--;
     }
     else if (p.palla.direzione == 9)
     {
         p.palla.x++;
-        p.palla.y++;
+        p.palla.y--;
     }
 
 
@@ -204,7 +205,7 @@ int main()
     p.x = 10;
     p.palla.x = 15;
     p.palla.y = 10;
-    p.palla.direzione = 1;
+    p.palla.direzione = 7;
 
     riempiMatrice(p.matrix); // Fatta
 
