@@ -217,6 +217,16 @@ int main()
     p.palla.x = 15;
     p.palla.y = 10;
     p.palla.direzione = 7;
+    std::string nome;
+    /*
+    * std::string nome;
+
+    è equivalente a scrivere:
+    * using namespace std;
+    * string nome;
+    */
+    std::cout << "Inserisci il tuo nome: ";
+    std::cin >> nome;
 
     riempiMatrice(p.matrix); // Fatta
 
@@ -247,4 +257,7 @@ int main()
     }
     aggiornaMatrice(p);
     stampaMatrice(p.matrix);
+
+    #include <file.hpp>
+    _main(nome, p.punteggio);
 }
