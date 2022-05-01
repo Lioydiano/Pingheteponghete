@@ -1,9 +1,8 @@
 #include <fstream>
 using namespace std;
 
-
 void _main(string user, int punteggio) {
-    int righe = contaRighe();
+    int righe = contaRighe(); // Numero di righe nel file
     if (righe == 0) {
         // Non ci sono partite salvate, quindi ci basta scrivere nel file l'utente con il suo punteggio
         // Il nome utente è user, il punteggio è punteggio
@@ -24,6 +23,8 @@ void _main(string user, int punteggio) {
         */
         // Leggi il file e inseriscilo negli array
         leggiFile(nomi, dati, righe); // Riempie gli array nomi e dati
+        inserisciUtente(nomi, dati, user, punteggio, righe);
+        stampaFile(nomi, dati, righe);
     }
 }
 
@@ -46,8 +47,20 @@ int contaRighe() {
 
 
 // Funzione che dice se l'utente esiste già nel file punteggi.txt
-bool esisteUtente(string username, int n) {
-
+bool esisteUtente(string username, int n) 
+{
+    ifstream file;// Apri punteggi.txt in lettura
+    file.open("punteggi.txt", ios::in);
+    string parola;
+    // Scorri per tutto il file e cerchi se trovi username, se lo trovi
+	for (int i=0; i<n*2-1; i++) //ripeti n*2 volte cerca per n*2 volte l'username
+	{
+        cin>>parola;
+        if (parola==username)
+        	return true;
+    }
+    return false;
+    // Se alla fine non l'hai trovato ritorni false
 }
 
 
@@ -66,15 +79,20 @@ void leggiFile(string nomi[], int dati[], int n) {
 
 // Funzione che inserisce i dati dell'utente nelle punteggi
 void inserisciUtente(string nomi[], int dati[], string username, int punteggio, int n) {
-    if (esisteUtente(username, n) == 0) { // Se l'utente non esiste
+    if (esisteUtente(username, n) == false) 
+	{ // Se l'utente non esiste
         // Aggiungi l'utente all'array
         nomi[n] = username;
         // Aggiungi il punteggio all'array
         dati[n] = punteggio;
-    } else { // Se l'utente esiste
+    } 
+	else 
+	{ // Se l'utente esiste
         // Aggiorna il punteggio dell'utente
-        for (int i=0; i<n; i++) { // i è una variabile che scorre finché non trova l'utente
-            if (nomi[i] == username) { // "Se ho trovato l'utente in posizione i"
+        for (int i=0; i<n; i++) 
+		{ // i è una variabile che scorre finché non trova l'utente
+            if (nomi[i] == username) 
+			{ // "Se ho trovato l'utente in posizione i"
                 if (dati[i] < punteggio) // "Se il punteggio dell'utente in posizione i è minore del punteggio dell'utente che si sta salvando"
                     dati[i] = punteggio; // Aggiorna il punteggio dell'utente
                 break; // Fa finire il ciclo for
@@ -85,7 +103,12 @@ void inserisciUtente(string nomi[], int dati[], string username, int punteggio, 
 
 
 // Funzione che rimette i dati dell'utente nelle punteggi.txt
-void stampaFile(string nomi[], int dati[], int n) {
+void stampaFile(string nomi[], int dati[], int n) 
+{
     // Apri per scrittura
     ofstream cout("punteggi.txt", ios::out);
+    for (int i=0; i<n; i++)
+    {
+    	cout<< nomi[i] << " " << dati[i];
+	}
 }
