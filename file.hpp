@@ -1,32 +1,6 @@
 #include <fstream>
 using namespace std;
 
-void _main(string user, int punteggio) {
-    int righe = contaRighe(); // Numero di righe nel file
-    if (righe == 0) {
-        // Non ci sono partite salvate, quindi ci basta scrivere nel file l'utente con il suo punteggio
-        // Il nome utente è user, il punteggio è punteggio
-        ofstream file;
-        file.open("punteggi.txt", ios::out);
-        file << user << " " << punteggio << endl;
-        file.close(); // Chiudi il file, è facoltativo perché si chiuderebbe lo stesso alla fine della funzione quando la variabile file viene distrutta
-    } else {
-        // "Se l'utente user non esiste"
-        if (esisteUtente(user, righe) == 0) // ! significa "NOT"
-            righe++; // Se l'utente non esiste, allora aggiungi una riga agli array
-        string nomi[righe]; // Array che conterrà i nomi
-        int dati[righe]; // Array che conterrà i punteggi
-        /*
-        * nomi[0] = "Chiara"; dati[0] = 100;
-        * nomi[1] = "Fiore"; dati[1] = 200;
-        * nomi[2] = "Giulia"; dati[2] = 300;
-        */
-        // Leggi il file e inseriscilo negli array
-        leggiFile(nomi, dati, righe); // Riempie gli array nomi e dati
-        inserisciUtente(nomi, dati, user, punteggio, righe);
-        stampaFile(nomi, dati, righe);
-    }
-}
 
 
 // Funzione che ritorna il numero di righe presenti in punteggi.txt
@@ -40,7 +14,8 @@ int contaRighe() {
     // Conta righe
     int conta=0;
     // getline legge una riga alla volta, prende come parametri l'oggetto ifstream (in questo caso cin) e la stringa nella quale mette la riga appena letta
-    while (getline(cin, " ")) // Finché non incontra il carattere EOF (End Of File)
+    string inutile;
+    while (getline(cin, inutile)) // Finché non incontra il carattere EOF (End Of File)
         conta++;
     return conta;
 }
@@ -111,4 +86,31 @@ void stampaFile(string nomi[], int dati[], int n)
     {
     	cout<< nomi[i] << " " << dati[i];
 	}
+}
+
+void _main(string user, int punteggio) {
+    int righe = contaRighe(); // Numero di righe nel file
+    if (righe == 0) {
+        // Non ci sono partite salvate, quindi ci basta scrivere nel file l'utente con il suo punteggio
+        // Il nome utente è user, il punteggio è punteggio
+        ofstream file;
+        file.open("punteggi.txt", ios::out);
+        file << user << " " << punteggio << endl;
+        file.close(); // Chiudi il file, è facoltativo perché si chiuderebbe lo stesso alla fine della funzione quando la variabile file viene distrutta
+    } else {
+        // "Se l'utente user non esiste"
+        if (esisteUtente(user, righe) == 0) // ! significa "NOT"
+            righe++; // Se l'utente non esiste, allora aggiungi una riga agli array
+        string nomi[righe]; // Array che conterrà i nomi
+        int dati[righe]; // Array che conterrà i punteggi
+        /*
+        * nomi[0] = "Chiara"; dati[0] = 100;
+        * nomi[1] = "Fiore"; dati[1] = 200;
+        * nomi[2] = "Giulia"; dati[2] = 300;
+        */
+        // Leggi il file e inseriscilo negli array
+        leggiFile(nomi, dati, righe); // Riempie gli array nomi e dati
+        inserisciUtente(nomi, dati, user, punteggio, righe);
+        stampaFile(nomi, dati, righe);
+    }
 }
