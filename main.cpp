@@ -2,6 +2,8 @@
 #include <fstream>
 #include <thread>
 #include <future>
+#include <conio.h>
+#include "file.hpp"
 
 // fare la skin per partita e palla
 
@@ -191,20 +193,10 @@ void processaMossa(Partita &p, int mossa) // Chiara
 {
     // Sposta la paletta a seconda di quanto indicato dall'utente
     // 4 = sinistra, 6 = destra
-    if (mossa == 4)
+    if (mossa == 52) // '4'
         p.x--;// Muovi a sinistra
-    else if (mossa == 6)
+    else if (mossa == 54) // '6'
         p.x++;
-}
-
-
-// Attende una mossa, poi ritorna il valore
-int inputMossa() //spiegazione di Mattia in classe
-{
-    using namespace std;
-    int mossa;
-    if (cin >> mossa)
-        return mossa;
 }
 
 
@@ -234,7 +226,7 @@ int main()
     while (true) 
     { // Finché vero, quindi un while infinito
         using namespace std::literals; // Permette di scrivere cose tipo 0.25s oppure 1s
-	    auto input = std::async(std::launch::async, inputMossa);
+	    auto input = std::async(std::launch::async, getch); // Aspetta una mossa
         while (input.wait_for(0.15s) != std::future_status::ready) 
         {
             // Controlliamo se ha perso
@@ -258,6 +250,6 @@ int main()
     aggiornaMatrice(p);
     stampaMatrice(p.matrix);
 
-    #include <file.hpp>
     _main(nome, p.punteggio);
 }
+// g++ main.cpp -o pingheteponghete.exe -std=c++2a
