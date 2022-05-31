@@ -74,7 +74,8 @@ struct Partita
     char matrix[20][50]; 
     int punteggio; 
     char skin;
-    int x; 
+    int x;
+    int larghezza;
     Ball palla;
 };
 
@@ -227,9 +228,18 @@ void aggiornaMatrice(Partita &p) // Chiara
             p.matrix[3][j] = ' ';
     }
 
-    p.matrix[3][p.x-1] = p.skin;
-    p.matrix[3][p.x] = p.skin;
-    p.matrix[3][p.x+1] = p.skin;
+    if (p.larghezza == 1) {
+        p.matrix[3][p.x] = p.skin;
+    } else if (p.larghezza == 2) {
+        p.matrix[3][p.x-1] = p.skin;
+        p.matrix[3][p.x] = p.skin;
+    } else if (p.larghezza == 3) {
+        p.matrix[3][p.x-1] = p.skin;
+        p.matrix[3][p.x] = p.skin;
+        p.matrix[3][p.x+1] = p.skin;
+        p.larghezza = 0;
+    }
+    p.larghezza++;
 
     for (int conta=0; conta<50; conta++)
     {
@@ -258,6 +268,7 @@ void processaMossa(Partita &p, int mossa)
 int main() 
 {
     Partita p;
+    p.larghezza = 3;
     p.skin = '_';
     p.palla.skin = 'O';
     p.x = 10; //posizione iniziale paletta
